@@ -33,7 +33,8 @@ change's `qa.md` doesn't record.
    - the whole test suite, with its counts;
    - the same suite on a disposable local copy of the production database
      engine (MariaDB or MySQL), when the tests normally run on another
-     (SQLite);
+     (SQLite): the whole suite, not a sample (the `qa` skill's fast test
+     databases make that minutes, not hours);
    - a fresh install: every migration chain from an empty database, then the
      repository's schema-drift check (`alembic check`, for example);
    - for a schema change, an upgrade from the previous release with data in
