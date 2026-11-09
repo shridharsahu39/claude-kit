@@ -119,9 +119,24 @@ A change is done when:
    `performance-auditor` agent's check for a change on a hot path (the `qa`
    and `performance` skills);
 2. its security check is recorded in `qa.md`, as
-   `.claude/rules/security.md` requires;
+   `.claude/rules/security.md` requires: the `security-reviewer`'s findings
+   (the repository's checklist and the OWASP Top 10 and API Security Top 10
+   items that apply), each fixed or accepted by the owner;
 3. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
-4. `HANDOVER.md` is current.
+4. `HANDOVER.md` is current;
+5. **names say what they hold:** every file, module, page, component and test
+   the change adds is named for its subject in the product's words (a test for
+   its feature, not its release). The `security-reviewer`'s "Names" section
+   lists any that don't; rename them, imports and references with them, before
+   handover;
+6. **cheap to read, and no slower:** the `security-reviewer`'s "Structure and
+   speed" section is answered. Each item is fixed, or the record says why not.
+   A fix for reading cost (a split file, a shared helper, a shorter guidance
+   file) never adds a query, a request or bundle weight. Speed comes first.
+
+Keep the record itself lean: cite requirement and decision ids (`AC-3`,
+`D-2`) instead of restating them, put the run counts in `qa.md` and not the
+output, and keep `HANDOVER.md` to what the next session needs.
 
 When it ships, the `release` skill takes it from there: the checks rerun, the
 version, the artifact and the PR.

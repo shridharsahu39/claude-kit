@@ -38,11 +38,28 @@ change's `qa.md` doesn't record.
      repository's schema-drift check (`alembic check`, for example);
    - for a schema change, an upgrade from the previous release with data in
      it, a rerun after a stop part-way, and the downgrade;
-   - the frontend's typecheck, and the tests of any companion program.
+   - the frontend's typecheck, and the tests of any companion program;
+   - a dependency vulnerability scan of what ships: `pip-audit -r
+     requirements.txt` (run with `uvx pip-audit`, or install it in a scratch
+     folder) and `npm audit --omit=dev` in the frontend. A high or critical
+     advisory in a package that ships blocks the release until it's upgraded,
+     or until the owner accepts it with a reason recorded in the PR. Without
+     network access, say the scan didn't run.
 
    If a check can't run here (no MariaDB on this machine, say), stop. Ask
    whether to ship without it, and record the answer.
-4. **Commit by explicit paths.** Stage the files by name, never with `git add
+4. **Names and structure.** List the files the release adds or renames
+   (`git diff --name-status <base>...HEAD`) and check that:
+   - each name says what it holds, in the product's words: a reader shouldn't
+     need to open it or know the release history;
+   - the release grew no file past about 500 lines, or into two subjects;
+   - the guidance it touched (`CLAUDE.md`, `AGENTS.md`, rules) says each rule
+     once.
+
+   Rename or split what doesn't pass, with every import and reference, and
+   rerun the tests. Speed comes first: never trade a query, a request or bundle
+   weight for a shorter file. Say in the PR what was renamed or split.
+5. **Commit by explicit paths.** Stage the files by name, never with `git add
    -A` or `.`, and leave out other people's work. Read the staged diff for
    secrets and personal data:
 
@@ -54,7 +71,7 @@ change's `qa.md` doesn't record.
    Every hit must be a test placeholder (`example.com`, `9999999999`,
    `ABCPE1234F`). A real mobile, PAN, email or name blocks the commit. The
    guard checks it again.
-5. **Build the artifact** with the repository's own tool, from the committed
+6. **Build the artifact** with the repository's own tool, from the committed
    tree. Then list its contents and check for files that must never ship:
 
    ```bash
@@ -63,15 +80,15 @@ change's `qa.md` doesn't record.
 
    That should print nothing. Then confirm the release's migrations and its
    built UI are in the artifact.
-6. **Push to the one open PR.** Add to the open PR for this line of work, and
+7. **Push to the one open PR.** Add to the open PR for this line of work, and
    update its title and description to cover every release it now carries:
    what changed, the migrations, the checks run and what wasn't verified.
    Never open a second, stacked PR. A PR is opened only when none is open, and
    it targets the base branch the repository's `CLAUDE.md` names.
-7. **Update the record.** In each change's `HANDOVER.md`, set the status,
+8. **Update the record.** In each change's `HANDOVER.md`, set the status,
    branch, commit and PR link, and the migrations and deployments owed. Commit
    that as its own small commit ("Handover: PR link").
-8. **Tell the owner:**
+9. **Tell the owner:**
    - the artifact's path and version;
    - the deploy steps, from the deploy notes;
    - **what wasn't verified**: the production database version and its
