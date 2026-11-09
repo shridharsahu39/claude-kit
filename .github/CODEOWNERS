@@ -1,0 +1,4 @@
+# Who must review each change to the kit, once `main` requires code owners'
+# reviews. Nobody can approve their own pull request, so name a second reviewer
+# here before turning that on.
+* @dixit0703

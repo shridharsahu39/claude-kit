@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "sprintmoney": {
+      "source": {
+        "source": "github",
+        "repo": "Wildflower-Business-Services-Pvt-Ltd/claude-kit"
+      },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "sm-kit@sprintmoney": true
+  }
+}

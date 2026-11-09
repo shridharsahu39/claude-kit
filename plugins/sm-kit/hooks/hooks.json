@@ -1,0 +1,17 @@
+{
+  "description": "sm-kit's guard: refuses the commands SprintMoney's guidance forbids, and checks each commit for local data, secrets and personal data.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/guard.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

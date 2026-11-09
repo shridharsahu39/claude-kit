@@ -1,0 +1,8 @@
+# Claude Code's own per-machine files.
+worktrees/
+settings.local.json
+
+# Sensitive working data stays on each developer's machine.
+# What goes where: rules/local-data.md
+local/*
+!local/README.md
