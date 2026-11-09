@@ -20,6 +20,12 @@ import, a schema change on a large table, or a screen's first load. Brief the
 auditor with the record, each repository and branch, the targets and the
 expected load.
 
+A repository that isn't a Frappe app takes its server, data and sign-in from
+its own `qa` skill. There, the Frappe tools below give way to the stack's own
+tools: the ASGI or WSGI server's access log for timings, the ORM's SQL echo
+for query counts, and `EXPLAIN` on the production engine. The load generator
+and the safety rules still apply.
+
 ## Targets
 
 The change's spec gives the targets; for a scale audit the owner gives the

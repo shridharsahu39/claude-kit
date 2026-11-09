@@ -23,7 +23,8 @@ In a repository whose package.json uses Prettier, Markdown and JSON are
 formatted with that repository's own Prettier, as its CI checks them.
 
 It works only on a team repository's own checkout: the top of a git work tree
-with a remote in the team's GitHub organization. It never writes or deletes
+with a remote in the team's GitHub organization, or one of the team's
+repositories outside it (TEAM_OUTSIDE). It never writes or deletes
 through a symlink. Exits 1 when --check finds a difference, 2 when it skipped
 a folder.
 """
@@ -52,7 +53,12 @@ RETIRED = {
 }
 FRONT = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
 APP_SECTION = re.compile(r"\n## In this app\n(.*?)\n## Before handover\n", re.DOTALL)
-TEAM_REMOTE = re.compile(r"github\.com[:/]Wildflower-Business-Services-Pvt-Ltd/")
+# The organisation's repositories, and the team repositories kept outside it. A host alias such as
+# github.com-<account> (one SSH key per GitHub account) counts as github.com.
+TEAM_OWNERS = ["Wildflower-Business-Services-Pvt-Ltd", "shridharsahu39"]
+TEAM_OUTSIDE = ["fseduventures/classmanager-espo"]
+TEAM_REMOTE = re.compile(r"github\.com(?:-[\w.-]+)?[:/](?:%s)(?:\.git)?(?:\s|$)|github\.com(?:-[\w.-]+)?[:/](?:%s)/" % (
+    "|".join(re.escape(r) for r in TEAM_OUTSIDE), "|".join(re.escape(o) for o in TEAM_OWNERS)))
 
 
 def not_a_team_repository(repo):
@@ -66,7 +72,7 @@ def not_a_team_repository(repo):
     if Path(top).resolve() != repo.resolve():
         return f"not the top of its checkout ({top} is)"
     if not TEAM_REMOTE.search(remotes):
-        return "no remote in the team's GitHub organization"
+        return "no remote in the team's GitHub organization or TEAM_OUTSIDE"
     return None
 
 

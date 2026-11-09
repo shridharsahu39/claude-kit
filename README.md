@@ -10,8 +10,10 @@ SprintMoney's shared Claude Code set-up. It's two things:
     `qa` (how every change is tested), `performance` (performance and scale
     checks, with a load generator that runs only against this machine),
     `brd-design` (a BRD and its designs combined into a spec), `local-data`
-    (filing sensitive files) and `setup-machine` (a developer's
-    `~/.claude/CLAUDE.md` and QA site);
+    (filing sensitive files), `setup-machine` (a developer's
+    `~/.claude/CLAUDE.md`, tools, without sudo too, and QA site), `release`
+    (readiness checks, the artifact, the one open PR) and `handover` (moving
+    work, and the memory that doesn't travel, to another computer);
   - agents: `security-reviewer` (an independent read-only review of a diff),
     `qa-auditor` (an independent end-to-end QA audit of a change) and
     `performance-auditor` (an independent performance and scale check);
@@ -47,7 +49,7 @@ What turns the kit on is each team repository's `.claude/settings.json`.
 1. **Claude Code** 2.1.275 or later (`claude --version`), signed in with the
    organization's Claude account.
 2. **Read access to this repository** on GitHub. Check it with
-   `gh repo view Wildflower-Business-Services-Pvt-Ltd/claude-kit`.
+   `gh repo view shridharsahu39/claude-kit`.
 3. **Git that reaches GitHub without a prompt.** Claude Code clones over SSH
    and falls back to HTTPS, so either works: an SSH key GitHub knows
    (`ssh -T git@github.com` greets you by name), or `gh auth login` followed by
@@ -68,7 +70,7 @@ What turns the kit on is each team repository's `.claude/settings.json`.
    are) and gives you the commands to create a QA site.
 3. Check it worked: typing `/sm-kit:` lists the kit's skills, and
    `claude plugin marketplace list`, run inside the repository, shows
-   `sprintmoney` from `GitHub (Wildflower-Business-Services-Pvt-Ltd/claude-kit)`.
+   `sprintmoney` from `GitHub (shridharsahu39/claude-kit)`.
 
 The plugin's skills are `/sm-kit:<name>`; its agents are `sm-kit:<name>`.
 
@@ -80,7 +82,7 @@ as `claude plugin install …`. That adds the marketplace to your user settings
 and turns `sm-kit` on in all your sessions:
 
 ```
-/plugin install sm-kit --marketplace Wildflower-Business-Services-Pvt-Ltd/claude-kit
+/plugin install sm-kit --marketplace shridharsahu39/claude-kit
 ```
 
 ### Updates
@@ -150,7 +152,7 @@ To try a change before it's released, point your own machine at your clone:
 after `claude plugin marketplace add <your clone>`, every session loads the kit
 from it, edits included. To go back to GitHub's copy, run
 `claude plugin marketplace remove sprintmoney`, then
-`claude plugin marketplace add Wildflower-Business-Services-Pvt-Ltd/claude-kit`.
+`claude plugin marketplace add shridharsahu39/claude-kit`.
 `claude --plugin-dir plugins/sm-kit` loads your clone for one session only.
 
 ## Adding a repository

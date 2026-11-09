@@ -13,6 +13,21 @@ says how to work in it. Written from sm-kit's `setup-machine` template.
 - The frontend, `sprint-money-frontend`: `<path>`.
 - Other team repositories: `<path, or delete this line>`.
 
+## Other stacks
+
+- `<repository>` (`<path>`): `<its stack, e.g. FastAPI + React>`. Its `qa`
+  skill says how to run it. Environments: `<e.g. server/.venv, Python 3.12>`.
+  `<Or delete this section.>`
+
+## Tools
+
+- `<Where the tools came from: system packages, or ~/.local (uv, Node, gh)
+  with ~/.local/bin on the PATH.>`
+- `<The database for migration checks, e.g. local MariaDB with
+  cm_migration_test, or "none yet: the owner installs it with sudo".>`
+- GitHub: `<SSH key and host aliases, or gh over HTTPS>`. Never run
+  `gh auth login` or `gh auth switch` for the developer.
+
 ## Sites
 
 - Dev site: `<site>`, with developer mode on.
