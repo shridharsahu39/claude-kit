@@ -1,7 +1,7 @@
 # The team's repositories
 
-All are private repositories in the `Wildflower-Business-Services-Pvt-Ltd`
-GitHub organisation. Each has its own `CLAUDE.md` and `.claude/`; read them
+All but the last table are private repositories in the
+`Wildflower-Business-Services-Pvt-Ltd` GitHub organisation. Each has its own `CLAUDE.md` and `.claude/`; read them
 before editing there. Where each is checked out on a machine is in that
 developer's `~/.claude/CLAUDE.md`.
 
@@ -46,3 +46,13 @@ back into it.
 | `term` | Term insurance's Frappe side | `develop` |
 | `timedesk` | Department routing and turnaround tracking on Helpdesk | `develop` |
 | `vehicle` | Motor insurance | `develop` |
+
+## Outside the organisation
+
+Team repositories kept elsewhere. `tools/sync.py` accepts them through its
+`TEAM_OUTSIDE` list. None of them is a Frappe app: each one's own `qa` skill
+replaces the Frappe parts of the kit's `qa` and `performance` skills.
+
+| Repository | What it is | Base branch |
+| --- | --- | --- |
+| `fseduventures/classmanager-espo` | ClassManager: a FastAPI monolith (`server/`) and a React UI (`frontend/`) for coaching institutes, hosted on MilesWeb (cPanel Passenger, MySQL). Alembic migrations; SQLite for tests, plus a local MariaDB. Its WhatsApp client is in `client-side/whatsapp/` | `main` |

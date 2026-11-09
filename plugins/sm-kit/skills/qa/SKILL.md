@@ -12,6 +12,13 @@ How to run and sign in to a repository's stack is that repository's business.
 `mutual_fund`, the relay and the frontend each have their own `qa` skill
 (`.claude/skills/qa/SKILL.md`); read it for every repository a change
 touches. A Frappe app without one follows [Frappe apps](#frappe-apps) below.
+A repository that isn't a Frappe app (ClassManager, for example; see
+[the team's repositories](../change/repositories.md)) always has its own `qa`
+skill. That skill replaces everything here about benches, sites, Desk and the
+QA site. The method in [How a change is tested](#how-a-change-is-tested) and
+the safety rules still apply. Where the stack has a database other than the one
+its tests use (SQLite in tests, MySQL or MariaDB in production), run the suite
+and the migrations on a disposable local copy of the production engine too.
 
 ## How a change is tested
 

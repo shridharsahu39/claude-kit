@@ -106,6 +106,9 @@ Then:
   actually run, and migrations or deployments owed. Update it before yielding.
 - Number decisions (`D-1`, …), with the reason and date, and say when the owner
   made one.
+- Moving the work to another computer or a fresh session: the `handover` skill
+  writes the note that carries what the record can't (unpushed work, standing
+  notes from memory, the machine's set-up).
 
 ## Finishing
 
@@ -119,6 +122,9 @@ A change is done when:
    `.claude/rules/security.md` requires;
 3. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
 4. `HANDOVER.md` is current.
+
+When it ships, the `release` skill takes it from there: the checks rerun, the
+version, the artifact and the PR.
 
 ## What stays out
 

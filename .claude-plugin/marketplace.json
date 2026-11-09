@@ -9,7 +9,7 @@
     {
       "name": "sm-kit",
       "source": "./plugins/sm-kit",
-      "description": "SprintMoney's shared Claude Code kit: change records, BRD-and-design specs, the QA and performance processes, filing sensitive data, the security-reviewer, qa-auditor and performance-auditor agents, and a guard hook."
+      "description": "SprintMoney's shared Claude Code kit: change records, BRD-and-design specs, the QA, performance and release processes, handing work between computers, filing sensitive data, machine set-up (without sudo too), the security-reviewer, qa-auditor and performance-auditor agents, and a guard hook."
     }
   ]
 }

@@ -3,7 +3,7 @@
     "sprintmoney": {
       "source": {
         "source": "github",
-        "repo": "Wildflower-Business-Services-Pvt-Ltd/claude-kit"
+        "repo": "shridharsahu39/claude-kit"
       },
       "autoUpdate": true
     }
