@@ -48,6 +48,14 @@ and the migrations on a disposable local copy of the production engine too.
 6. **Report the run** in the final summary: cases passed, failed, blocked and
    not run, the performance results, and what the runs left on the QA site.
 
+**Lean runs (tokens):** run tests quietly and read only what failed:
+`pytest -q`, filtered to the failures and the summary line
+(`| grep -E "^E |FAILED|passed|failed"`); run a long suite in the background and
+wait for it to finish rather than polling. Run the target tests while working,
+and the whole suite once before handover. Check a screenshot or a page's text
+against the expected result; don't dump whole pages. Record counts and
+outcomes in `qa.md`, not the output.
+
 **Depth, tiered:** every scenario of each affected journey; a quick pass over
 the neighbouring journeys; every journey the repository's `qa` skill lists (or,
 where it lists none, every journey of the product) when the change touches

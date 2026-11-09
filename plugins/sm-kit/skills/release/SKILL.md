@@ -42,11 +42,17 @@ change's `qa.md` doesn't record.
 
    If a check can't run here (no MariaDB on this machine, say), stop. Ask
    whether to ship without it, and record the answer.
-4. **Names.** List the files the release adds or renames (`git diff --name-status
-   <base>...HEAD`) and check each name says what it holds, in the product's
-   words: a reader shouldn't need to open it or know the release history.
-   Rename unclear ones, with every import and reference, and rerun the tests.
-   Say in the PR which names were changed.
+4. **Names and structure.** List the files the release adds or renames
+   (`git diff --name-status <base>...HEAD`) and check that:
+   - each name says what it holds, in the product's words: a reader shouldn't
+     need to open it or know the release history;
+   - the release grew no file past about 500 lines, or into two subjects;
+   - the guidance it touched (`CLAUDE.md`, `AGENTS.md`, rules) says each rule
+     once.
+
+   Rename or split what doesn't pass, with every import and reference, and
+   rerun the tests. Speed comes first: never trade a query, a request or bundle
+   weight for a shorter file. Say in the PR what was renamed or split.
 5. **Commit by explicit paths.** Stage the files by name, never with `git add
    -A` or `.`, and leave out other people's work. Read the staged diff for
    secrets and personal data:
