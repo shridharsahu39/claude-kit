@@ -98,6 +98,31 @@ Then:
    skill fills it.
 3. Add other documents only when the work needs them (`design.md`, a runbook).
 
+## Avoid rework
+
+Most repeated work comes from finding out late. Before building, and while
+building:
+
+1. **Settle the design with the owner first.** In `spec.md`, say:
+   - which module, page and statement owns each concern, one concern each
+     (pay of one kind isn't computed inside another kind's statement);
+   - who sees what;
+   - what shows when there's no data (a section without records isn't
+     shown).
+
+   Get the owner's yes before the first line of code.
+2. **The `security-reviewer` reads the design before the code**, then reviews
+   each part once it's built. Fix its findings, and have the same review
+   confirm the fixes.
+3. **Scan dependencies when a release line starts** and whenever one changes
+   (`pip-audit`, `npm audit`), not only at release. An upgrade found at the end
+   reopens every check.
+4. **Test on the production database engine from the first test** (the `qa`
+   skill's fast test databases make that cheap), not only at release.
+5. **Freeze before the final runs.** While editing, run the target tests.
+   Start the full suites (both engines) and the browser checks only after the
+   last change. A change made while they run means running them again.
+
 ## While working
 
 - Add a `progress.md` entry at each decision or milestone.
