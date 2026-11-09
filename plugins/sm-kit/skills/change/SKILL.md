@@ -121,7 +121,12 @@ A change is done when:
 2. its security check is recorded in `qa.md`, as
    `.claude/rules/security.md` requires;
 3. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
-4. `HANDOVER.md` is current.
+4. `HANDOVER.md` is current;
+5. **names say what they hold:** every file, module, page, component and test
+   the change adds is named for its subject in the product's words (a test for
+   its feature, not its release). The `security-reviewer`'s "Names" section
+   lists any that don't; rename them, imports and references with them, before
+   handover.
 
 When it ships, the `release` skill takes it from there: the checks rerun, the
 version, the artifact and the PR.

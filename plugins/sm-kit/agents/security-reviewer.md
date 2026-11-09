@@ -26,3 +26,13 @@ read-only commands: `git diff`, `git log`, `git show`, `git status`, `ls`,
 
 No style or lint findings. If nothing meets the bar, say so, and say what you
 couldn't check.
+
+**Names, a separate section after the findings (never a finding).** List every
+file, module, page, component or test the change adds or renames whose name
+doesn't say what it holds in the product's words, with a better name:
+`corrections.py` → `paper_correction.py`, `billing.py` (when fees are billed
+too) → `teacher_billing.py`, `inbox.py` → `app_notifications.py`, a test named
+for a release (`test_v3310.py`) → for its feature (`test_teacher_billing.py`).
+A name is unclear when a reader would have to open the file, or know the
+release history, to tell what's inside, or when the word means two things in
+this product. Say "Names: none" when all are clear.

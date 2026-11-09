@@ -42,7 +42,12 @@ change's `qa.md` doesn't record.
 
    If a check can't run here (no MariaDB on this machine, say), stop. Ask
    whether to ship without it, and record the answer.
-4. **Commit by explicit paths.** Stage the files by name, never with `git add
+4. **Names.** List the files the release adds or renames (`git diff --name-status
+   <base>...HEAD`) and check each name says what it holds, in the product's
+   words: a reader shouldn't need to open it or know the release history.
+   Rename unclear ones, with every import and reference, and rerun the tests.
+   Say in the PR which names were changed.
+5. **Commit by explicit paths.** Stage the files by name, never with `git add
    -A` or `.`, and leave out other people's work. Read the staged diff for
    secrets and personal data:
 
@@ -54,7 +59,7 @@ change's `qa.md` doesn't record.
    Every hit must be a test placeholder (`example.com`, `9999999999`,
    `ABCPE1234F`). A real mobile, PAN, email or name blocks the commit. The
    guard checks it again.
-5. **Build the artifact** with the repository's own tool, from the committed
+6. **Build the artifact** with the repository's own tool, from the committed
    tree. Then list its contents and check for files that must never ship:
 
    ```bash
@@ -63,15 +68,15 @@ change's `qa.md` doesn't record.
 
    That should print nothing. Then confirm the release's migrations and its
    built UI are in the artifact.
-6. **Push to the one open PR.** Add to the open PR for this line of work, and
+7. **Push to the one open PR.** Add to the open PR for this line of work, and
    update its title and description to cover every release it now carries:
    what changed, the migrations, the checks run and what wasn't verified.
    Never open a second, stacked PR. A PR is opened only when none is open, and
    it targets the base branch the repository's `CLAUDE.md` names.
-7. **Update the record.** In each change's `HANDOVER.md`, set the status,
+8. **Update the record.** In each change's `HANDOVER.md`, set the status,
    branch, commit and PR link, and the migrations and deployments owed. Commit
    that as its own small commit ("Handover: PR link").
-8. **Tell the owner:**
+9. **Tell the owner:**
    - the artifact's path and version;
    - the deploy steps, from the deploy notes;
    - **what wasn't verified**: the production database version and its
