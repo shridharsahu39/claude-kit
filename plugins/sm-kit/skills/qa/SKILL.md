@@ -56,6 +56,26 @@ and the whole suite once before handover. Check a screenshot or a page's text
 against the expected result; don't dump whole pages. Record counts and
 outcomes in `qa.md`, not the output.
 
+**Fast test databases.** Build the schema once per run, never once per test.
+The run proves the migrations from an empty database, then each test starts
+from that migrated state:
+- on SQLite, copy the migrated file;
+- on MySQL/MariaDB, `DELETE FROM` every table with foreign-key checks off,
+  then put back the rows the migrations seeded, read once after migrating.
+  `DELETE` is cheaper than `TRUNCATE` on small tables, because InnoDB rebuilds
+  a truncated table.
+
+Rebuilding per test made one MariaDB run take hours (about two minutes a
+test). Built once, that's about a second a test, so the whole suite runs on
+the production engine for every release, not just a sample. Keep one test
+that compares the migrated schema with the models (`alembic check`).
+
+**Make SQLite as strict as production.** SQLite ignores column lengths and
+other limits that MySQL/MariaDB enforce. In the tests, check every string the
+ORM writes against its column's length (a `before_flush` listener), so a
+value that production would refuse fails on SQLite too. That check found two
+bugs that only MariaDB had shown.
+
 **Depth, tiered:** every scenario of each affected journey; a quick pass over
 the neighbouring journeys; every journey the repository's `qa` skill lists (or,
 where it lists none, every journey of the product) when the change touches
