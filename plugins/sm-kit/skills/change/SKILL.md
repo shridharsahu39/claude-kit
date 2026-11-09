@@ -119,7 +119,9 @@ A change is done when:
    `performance-auditor` agent's check for a change on a hot path (the `qa`
    and `performance` skills);
 2. its security check is recorded in `qa.md`, as
-   `.claude/rules/security.md` requires;
+   `.claude/rules/security.md` requires: the `security-reviewer`'s findings
+   (the repository's checklist and the OWASP Top 10 and API Security Top 10
+   items that apply), each fixed or accepted by the owner;
 3. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
 4. `HANDOVER.md` is current;
 5. **names say what they hold:** every file, module, page, component and test

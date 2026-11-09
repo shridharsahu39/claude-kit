@@ -17,9 +17,83 @@ read-only commands: `git diff`, `git log`, `git show`, `git status`, `ls`,
 3. For each changed entry point (whitelisted method, route, page, job,
    patch), trace who can reach it, what it trusts, what it reads and writes, and
    what it returns. Read the surrounding code, not only the diff.
-4. Report each finding with:
+4. Check the change against the OWASP Top 10 (2021), the OWASP API Security
+   Top 10 (2023) and the practices below, beyond the repository's own
+   checklist. Report only what applies to this diff.
+   - **Access control (A01, API1/API3/API5):**
+     - every route checks the caller;
+     - object-level checks on every id taken from the request (IDOR);
+     - function-level checks for admin and finance actions;
+     - no mass assignment: fields are copied by name, never the whole body;
+     - an action offered in the UI comes from the same check that enforces it.
+   - **Cryptography (A02):**
+     - secrets and personal data are encrypted or hashed at rest where the
+       repository says;
+     - only strong algorithms: no MD5 or SHA-1 for security, and passwords use
+       PBKDF2, bcrypt or argon2;
+     - tokens come from a CSPRNG;
+     - secrets are compared in constant time;
+     - TLS is assumed for anything sent off the machine.
+   - **Injection (A03):**
+     - SQL only with bound parameters;
+     - no request data in shell commands, file paths, templates, `eval`,
+       regular expressions (ReDoS) or log lines (log injection);
+     - output is encoded for its context, so no XSS:
+       - nothing passed raw to `dangerouslySetInnerHTML` or `v-html`;
+       - user text in an email's HTML is escaped;
+       - links only to http(s) URLs, never `javascript:`.
+   - **Insecure design (A04, API6):**
+     - business limits are enforced on the server: amounts, counts, dates and
+       states;
+     - maker-checker and idempotency where money or access changes;
+     - race conditions: row locks, or unique keys that make a second request
+       harmless.
+   - **Misconfiguration (A05, API8):**
+     - no debug output or stack traces in responses;
+     - security headers and a Content-Security-Policy are kept;
+     - cookies are `Secure`, `HttpOnly` and `SameSite`;
+     - CORS isn't opened wider;
+     - defaults are safe (a new setting starts closed);
+     - no sample credentials.
+   - **Vulnerable components (A06):**
+     - a new or changed dependency is maintained, pinned, from the official
+       index, and has no known advisory (`pip-audit`, `npm audit`, or the
+       ecosystem's own);
+     - nothing is loaded from a CDN without integrity.
+   - **Authentication and sessions (A07, API2):**
+     - login, reset and invitation flows keep lockout or rate limits;
+     - tokens are single-use and expire;
+     - sessions are revoked on deactivation or a password change;
+     - no user enumeration through different messages or timings.
+   - **Integrity (A08):**
+     - no unsafe deserialisation (`pickle`, `yaml.load`) of anything a user can
+       touch;
+     - uploads are checked by content and size, stored outside the web root,
+       and served through an access-checked route;
+     - webhooks and callbacks verify a signature.
+   - **Logging and monitoring (A09):**
+     - security events (sign-ins, refusals, money, role changes) are audited
+       with the actor;
+     - logs and audit rows never hold passwords, tokens, links that sign
+       someone in, or secret settings.
+   - **SSRF (A10, API7):** no server request to a URL the user controls,
+     unless it's on an allow-list, with private and metadata addresses refused.
+   - **Resource consumption (API4):**
+     - lists are paginated and uploads are capped;
+     - expensive actions (sending messages, exports, report builds) are limited
+       per user or per run;
+     - no unbounded loop driven by input.
+   - **Data exposure (API3):**
+     - responses carry only the fields that screen needs;
+     - personal data (PAN, mobile, bank details, pay) only for roles that may
+       see it, and masked otherwise;
+     - nothing sensitive in URLs, which end up in logs and history.
+   - **Third-party APIs (API10):** a partner's response is validated before use
+     and never trusted as an authority.
+5. Report each finding with:
    - severity: high (authorization bypass, one customer reaching another's data,
-     injection, leaked secret), medium, or low;
+     injection, leaked secret, remote code execution), medium, or low;
+   - the OWASP item it falls under (`A01`, `API3`, …), when there is one;
    - file and line;
    - the concrete attack or failure: who, with which input, gets what;
    - the fix.

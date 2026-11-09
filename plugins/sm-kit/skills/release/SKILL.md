@@ -38,7 +38,13 @@ change's `qa.md` doesn't record.
      repository's schema-drift check (`alembic check`, for example);
    - for a schema change, an upgrade from the previous release with data in
      it, a rerun after a stop part-way, and the downgrade;
-   - the frontend's typecheck, and the tests of any companion program.
+   - the frontend's typecheck, and the tests of any companion program;
+   - a dependency vulnerability scan of what ships: `pip-audit -r
+     requirements.txt` (run with `uvx pip-audit`, or install it in a scratch
+     folder) and `npm audit --omit=dev` in the frontend. A high or critical
+     advisory in a package that ships blocks the release until it's upgraded,
+     or until the owner accepts it with a reason recorded in the PR. Without
+     network access, say the scan didn't run.
 
    If a check can't run here (no MariaDB on this machine, say), stop. Ask
    whether to ship without it, and record the answer.
