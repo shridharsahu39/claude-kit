@@ -89,8 +89,21 @@ change's `qa.md` doesn't record.
 8. **Update the record.** In each change's `HANDOVER.md`, set the status,
    branch, commit and PR link, and the migrations and deployments owed. Commit
    that as its own small commit ("Handover: PR link").
-9. **Tell the owner:**
-   - the artifact's path and version;
+9. **Publish a GitHub release once the PR merges.** Before pushing more, check
+   the PR's state (`gh pr view <n> --json state`). A merged PR takes no more
+   commits: a later fix goes in a new PR as the next patch version.
+   - Once it's merged, rebuild the artifact from the merge commit (a worktree
+     at that commit). Install the worktree's own dependencies (`npm ci`) or copy
+     them; never link the main checkout's `node_modules` into it, because
+     `git worktree remove --force` deletes through the link. Then create the release: `gh release create
+     v<version> <artifact> --target <merge commit> --title <version> --notes
+     ...`.
+   - The notes cover what's new, the migrations, the deploy steps (pointing to
+     the deploy notes), and what wasn't verified.
+   - The owner deploys from the release's artifact, so every server runs a
+     file anyone can look up.
+10. **Tell the owner:**
+   - the artifact's path and version, and the release link once it exists;
    - the deploy steps, from the deploy notes;
    - **what wasn't verified**: the production database version and its
      limits, live providers (email, WhatsApp, payment), and the host's own
@@ -98,8 +111,9 @@ change's `qa.md` doesn't record.
 
 ## Never
 
-- Overwrite or re-tag a published release, or build an artifact from
-  uncommitted files.
+- Overwrite or re-tag a published release, rebuild its artifact under the same
+  version, or build an artifact from uncommitted files. A fix is a new patch
+  version with its own release.
 - Print a secret while checking for one: grep for its presence, never its
   value.
 - Deploy. The owner deploys and records it in the deployment log.

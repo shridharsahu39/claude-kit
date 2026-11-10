@@ -1,6 +1,6 @@
 {
   "name": "sm-kit",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "SprintMoney's shared Claude Code kit: change records, BRD-and-design specs, the QA, performance and release processes, handing work between computers, filing sensitive data, machine set-up (without sudo too), the security-reviewer, qa-auditor and performance-auditor agents, and a guard hook.",
   "author": {
     "name": "Wildflower Business Services"
