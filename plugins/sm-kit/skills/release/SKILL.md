@@ -93,7 +93,9 @@ change's `qa.md` doesn't record.
    the PR's state (`gh pr view <n> --json state`). A merged PR takes no more
    commits: a later fix goes in a new PR as the next patch version.
    - Once it's merged, rebuild the artifact from the merge commit (a worktree
-     at that commit). Then create the release: `gh release create
+     at that commit). Install the worktree's own dependencies (`npm ci`) or copy
+     them; never link the main checkout's `node_modules` into it, because
+     `git worktree remove --force` deletes through the link. Then create the release: `gh release create
      v<version> <artifact> --target <merge commit> --title <version> --notes
      ...`.
    - The notes cover what's new, the migrations, the deploy steps (pointing to
