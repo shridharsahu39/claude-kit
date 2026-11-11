@@ -14,7 +14,8 @@ Build against this list rather than reviewing at the end.
      comment and never act on caller-chosen records. Never take a DocType or
      field name from the caller.
    - A method that takes a record's id checks that the record belongs to the
-     caller (the customer, RM or partner) before reading or changing it. A
+     caller (the customer, RM or partner) before reading or changing it (IDOR).
+     So does every other record the request names, such as a row's link. A
      refused record answers "not found", so ids can't be probed.
    - New Desk roles and permissions are the least the job needs.
 2. **What it trusts.** Validate on the server: amounts, premiums, rates, dates,

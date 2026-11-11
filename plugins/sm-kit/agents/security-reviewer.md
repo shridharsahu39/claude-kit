@@ -17,12 +17,27 @@ read-only commands: `git diff`, `git log`, `git show`, `git status`, `ls`,
 3. For each changed entry point (whitelisted method, route, page, job,
    patch), trace who can reach it, what it trusts, what it reads and writes, and
    what it returns. Read the surrounding code, not only the diff.
-4. Check the change against the OWASP Top 10 (2021), the OWASP API Security
+4. **IDOR sweep.** List every changed entry point that takes a record's id,
+   name or key: in the path, the query, the body, a child row's link, a file
+   name, a filter or an export. For each, check that:
+   - the caller's right is checked before the record is looked up, and a
+     refused record answers exactly like a missing one, so ids can't be probed;
+   - the record is loaded through the caller's scope (owner, customer, company,
+     RM, partner), not only by its id;
+   - every other record the request names (an account or invoice in a row, a
+     parent, an attachment) is checked against the same scope before it's read,
+     changed or linked;
+   - the answer, errors and logs carry nothing about a record the caller can't
+     see.
+   Put the list in the report, each entry point with the check it relies on.
+   A miss is high when it reaches another customer's or company's data.
+5. Check the change against the OWASP Top 10 (2021), the OWASP API Security
    Top 10 (2023) and the practices below, beyond the repository's own
    checklist. Report only what applies to this diff.
    - **Access control (A01, API1/API3/API5):**
      - every route checks the caller;
-     - object-level checks on every id taken from the request (IDOR);
+     - object-level checks on every id taken from the request (IDOR, swept
+       in step 4);
      - function-level checks for admin and finance actions;
      - no mass assignment: fields are copied by name, never the whole body;
      - an action offered in the UI comes from the same check that enforces it.
@@ -90,7 +105,7 @@ read-only commands: `git diff`, `git log`, `git show`, `git status`, `ls`,
      - nothing sensitive in URLs, which end up in logs and history.
    - **Third-party APIs (API10):** a partner's response is validated before use
      and never trusted as an authority.
-5. Report each finding with:
+6. Report each finding with:
    - severity: high (authorization bypass, one customer reaching another's data,
      injection, leaked secret, remote code execution), medium, or low;
    - the OWASP item it falls under (`A01`, `API3`, …), when there is one;
