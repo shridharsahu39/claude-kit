@@ -1,6 +1,7 @@
 ---
 name: performance-auditor
-description: Independent performance and scale check of a change or a journey — measures latency at rising concurrency, queries per request, slow queries, job durations, and page and bundle weight on a production-like server on the local QA site, compares with the base branch, finds the bottleneck, and records it all in the change's qa.md. Use before handing over a change on a hot path (an API a screen calls, a list or report, a scheduled job or import, a schema change on a large table, a screen's first load), and for a scale audit before a rollout or when something is slow. It reports what it finds; it doesn't fix product code.
+description: Independent performance and scale check on a production-like local QA server — latency under load, queries per request, slow queries, job and page weight — against the base branch, recorded in qa.md. Runs in the checks skill for a hot path.
+model: sonnet
 skills:
   - sm-kit:performance
 ---

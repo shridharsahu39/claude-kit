@@ -1,6 +1,6 @@
 ---
 name: qa
-description: How every change is tested end to end — cases first, automated tests that fail without the change, a full audit by the qa-auditor agent for anything a person or a job does, fix and rerun, and the report — with the safety rules for any test run. Use when planning a change's tests, while running them, and before handing over. A repository's own qa skill, where it has one, adds how its stack runs.
+description: How a change is tested — cases first, automated tests that fail without the change, the qa-auditor's end-to-end audit in the checks, fix and rerun, and the safety rules for any test run. Use when planning or running a change's tests. A repository's own qa skill adds how its stack runs.
 ---
 
 # QA for every change
@@ -30,15 +30,16 @@ and the migrations on a disposable local copy of the production engine too.
    cases.
 2. **Automated tests.** Add or extend the tests for the cases in each
    repository, and show that each fails without the change.
-3. **A full QA audit by the `qa-auditor` agent** whenever the change touches
+3. **A full QA audit by the `qa-auditor` agent**, in the checks the owner
+   asks for (`/sm-kit:checks`), when the change touches
    something a person or a job does: a React screen, a Desk screen, an API a
    screen calls, a scheduled job. Brief it with the record, each repository and
    branch, and any write the owner approved in this session's chat. It adds the
    cases you missed, runs every case end to end in the browser on the QA site,
    records the run in `qa.md` and reports back. Unit tests alone never pass a
    case.
-4. **A performance check by the `performance-auditor` agent** when the change
-   is on a hot path: an API a screen calls, a list or report query, a scheduled
+4. **A performance check by the `performance-auditor` agent**, in the
+   checks, when the change is on a hot path: an API a screen calls, a list or report query, a scheduled
    job or import, a schema change on a large table, or a screen's first load.
    It measures the base branch and the change on a production-like server on
    the QA site and records the result in `qa.md`; the `performance` skill says

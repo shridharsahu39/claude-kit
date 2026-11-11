@@ -1,6 +1,6 @@
 ---
 name: brd-design
-description: Combine a BRD with its design files (Figma exports, screenshots, PDFs of screens) into one change record — requirements, screen-by-screen design, acceptance criteria, QA cases and the open questions. Use when the owner hands over a BRD, designs, or both, for a new feature or a change.
+description: Turn a BRD and its designs (Figma exports, screenshots, PDFs) into a change's spec — requirements, screens, acceptance criteria, QA cases, open questions. Use when the owner hands over a BRD or designs.
 argument-hint: "<yyyy-mm-dd-slug>"
 ---
 

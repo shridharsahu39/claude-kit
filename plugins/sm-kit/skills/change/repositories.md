@@ -1,7 +1,7 @@
 # The team's repositories
 
-All but the last table are private repositories in the
-`Wildflower-Business-Services-Pvt-Ltd` GitHub organisation. Each has its own `CLAUDE.md` and `.claude/`; read them
+All but the last table are private repositories in the team's GitHub
+organisation. Each has its own `CLAUDE.md` and `.claude/`; read them
 before editing there. Where each is checked out on a machine is in that
 developer's `~/.claude/CLAUDE.md`.
 

@@ -1,8 +1,8 @@
 {
   "name": "sm-kit",
-  "version": "1.3.3",
-  "description": "SprintMoney's shared Claude Code kit: change records, BRD-and-design specs, the QA, performance and release processes, handing work between computers, filing sensitive data, machine set-up (without sudo too), the security-reviewer, qa-auditor and performance-auditor agents, and a guard hook.",
+  "version": "1.4.0",
+  "description": "SprintMoney's shared Claude Code kit: task routing to the right record, design step and model; design before code with a design review; on-request checks (code quality, then security, QA and performance); a manual Cloudflare security audit; change records, BRD specs, release and handover; filing sensitive data; machine set-up; and a guard hook.",
   "author": {
-    "name": "Wildflower Business Services"
+    "name": "sm-kit contributors"
   }
 }

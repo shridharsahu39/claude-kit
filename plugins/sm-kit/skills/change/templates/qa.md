@@ -54,6 +54,14 @@ Only for a change on a hot path (sm-kit's `performance` skill); otherwise write
 
 - **Left on the site:** the volume rows kept or removed, and the servers stopped.
 
+## Code quality
+
+- **Reviewed:** each repository's diff, and when the `code-quality-reviewer` ran.
+
+| ID | Finding | Safe to apply | Outcome |
+| --- | --- | --- | --- |
+| CQ-1 | Dead code, duplicate, zombie route, cycle or slow query, and where | Yes, owner or no | Applied in `<commit>`, approved by the owner on <date>, or a follow-up |
+
 ## Security check
 
 - **Reviewed:** each repository's diff and its base, and when the `security-reviewer` agent ran.

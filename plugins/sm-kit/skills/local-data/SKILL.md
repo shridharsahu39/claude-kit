@@ -1,6 +1,6 @@
 ---
 name: local-data
-description: Where a sensitive file goes in .claude/local/, how to name it, and what may reach the repository from it — BRDs, designs, emails, exports, registrar (CAMS, KFin) files, BSE, KRA and bank files, partner API documents and Postman collections, logs and HAR files, screenshots, test identities. Use when a file arrives to be filed, before deriving anything from a file in .claude/local/, and when deciding what a record may say about one.
+description: Where a sensitive file goes in .claude/local/, its name, and what may reach the repository from it (BRDs, exports, registrar, BSE, KRA and bank files, partner docs, logs, screenshots). Use when filing one or deriving anything from one.
 ---
 
 # Filing sensitive data in `.claude/local/`

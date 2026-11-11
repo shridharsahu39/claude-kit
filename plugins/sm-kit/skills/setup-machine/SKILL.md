@@ -1,6 +1,6 @@
 ---
 name: setup-machine
-description: Write this developer's ~/.claude/CLAUDE.md (where the bench, its sites, the QA site and the repositories are) from the kit's template, install the tools a session needs (without sudo where it isn't available), and give the commands that create a local QA site. Use once per machine, on a new or second computer, or when ~/.claude/CLAUDE.md is missing or out of date.
+description: Set up a developer's machine — ~/.claude/CLAUDE.md from the kit's template, the tools a session needs (without sudo too), and a local QA site. Use once per machine or when ~/.claude/CLAUDE.md is missing or stale.
 ---
 
 # Set up this machine
