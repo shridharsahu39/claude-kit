@@ -1,6 +1,7 @@
 ---
 name: qa-auditor
-description: Independent end-to-end QA audit of a change through every journey it affects — works out the journeys and cases, runs them in the browser on the local QA site as each persona, and records the run in the change's qa.md. Use before handing over any change that touches something a person or a job does (a React screen, a Desk screen, an API a screen calls, a scheduled job). It reports what it finds; it doesn't fix product code.
+description: Independent end-to-end QA audit of a change — journeys and cases run in the browser on the local QA site as each persona, recorded in qa.md. Runs in the checks skill for anything a person or a job does. Never fixes product code.
+model: sonnet
 skills:
   - sm-kit:qa
 ---

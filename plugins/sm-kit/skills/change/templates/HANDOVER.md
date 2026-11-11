@@ -1,7 +1,8 @@
 # Handover: <change name>
 
 **Status:** <Planned | In progress | In review | Merged | Deployed | Paused | Abandoned>: <one line on where it stands>  
-**As of:** <YYYY-MM-DD>
+**As of:** <YYYY-MM-DD>  
+**Class:** <Text | Small fix | Feature | Refactor | Investigation>; for a small fix, its 2–3 line plan and the existing code it reuses.
 
 ## What changed
 

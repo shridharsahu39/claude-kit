@@ -6,9 +6,18 @@
         "repo": "shridharsahu39/claude-kit"
       },
       "autoUpdate": true
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable",
+        "ref": "skill-v4.8.2"
+      },
+      "autoUpdate": false
     }
   },
   "enabledPlugins": {
-    "sm-kit@sprintmoney": true
+    "sm-kit@sprintmoney": true,
+    "impeccable@impeccable": true
   }
 }

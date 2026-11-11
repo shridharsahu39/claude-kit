@@ -11,6 +11,12 @@ The end-to-end cases and the `qa-auditor` agent's runs are in the record's
 
 **Suites run:** each suite, its test count and the date.
 
+## Code quality
+
+| ID | Finding | Safe to apply | Outcome |
+| --- | --- | --- | --- |
+| CQ-1 | What and where | Yes, owner or no | Applied in `<commit>`, approved on <date>, or a follow-up |
+
 ## Security check
 
 - **Reviewed:** this repository's diff and its base, and when the

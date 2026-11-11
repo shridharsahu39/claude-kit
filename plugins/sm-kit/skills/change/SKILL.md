@@ -1,14 +1,53 @@
 ---
 name: change
-description: Start, resume or hand over the change record that every change needs before its first edit — a dated folder in .claude/changes/ with spec, progress, HANDOVER and qa. Use at the start of any code, config or data change, when resuming one, and before yielding.
+description: Route a task (text, small fix, feature, refactor, investigation) to its record, design step and model, then start, resume or hand over its change record in .claude/changes/. Use at the start of any code, config or data change, when resuming one, and before yielding.
 argument-hint: "<slug> [title]"
 ---
 
 # Change records
 
-Every change, however small, gets a record before its first edit. An
-investigation or a migration gets one too. Reuse a record only when the work
-continues that same change; otherwise link the related record.
+Before the first edit, route the task: its class sets the record, whether it
+needs a design, who does the work and on which model. Reuse a record only when
+the work continues that same change; otherwise link the related record.
+
+## Route the task
+
+| Class | What it is | Record | Design and review | Who works, on which model | Checks to recommend (the owner picks) |
+| --- | --- | --- | --- | --- | --- |
+| **Text** | Copy, labels, messages, translations, docs, comments; no logic | `HANDOVER.md` only | No | You for a few files; more → the `text-editor` agent (Haiku) | None; run the tests that assert the strings |
+| **Small fix** | One function or screen, no change to a contract, schema, permission, money flow or outside caller | `HANDOVER.md` and `qa.md` | No: a reuse search and a 2–3 line plan in `HANDOVER.md` | You | Quality and security |
+| **Feature** | New or changed contract, screen, job, schema, permission or money flow, or more than one module | All four files, plus `design.md` | Yes: the `design` skill, then the `design-reviewer` (Opus) | You | All that apply |
+| **Refactor or clean-up** | Behaviour unchanged: moves, merges, dead code, cycles | `HANDOVER.md`, `qa.md`, `design.md` | Yes: what moves, every caller kept | You | Quality and security |
+| **Investigation** | No code: a question, a bug's cause, data counts | `progress.md` and `HANDOVER.md` | No | You; an `Explore` agent only for a broad search | None |
+
+- **Classify on evidence:** do the reuse search first (a few `git grep`s),
+  then classify. A small fix that touches money, sign-in, permissions, tenant
+  or branch scope, a schema, or an outside caller (cron, webhook, callback,
+  public method) is a feature, but only when the code shows it does: "likely
+  needs a column" isn't a reason when the column or the server rule already
+  exists. Escalate mid-way if the work turns out bigger.
+- **Your session's model** is yours to pick: Sonnet is enough for text, small
+  fixes and building to an approved design; use Opus (`/model opus`) for
+  designs and hard bugs. The agents carry their own model.
+- **Agents, by Claude's guidance:** delegate only independent work that can
+  run in parallel, a broad search whose files you don't need to see, or a
+  review that must not be anchored on yours (give it the code, not your
+  conclusion). Do a handful of tool calls yourself. Brief an agent fully in
+  one message, then wait for its result; never redo its work.
+
+## The order for a feature or refactor
+
+1. **Spec**: scope and acceptance criteria (`brd-design` when there's a BRD).
+2. **Design**: the `design` skill writes `design.md`: what to reuse or
+   extend before writing anything new, one job per module, data,
+   concurrency, contract, outside callers, security of the design.
+3. **Design review**: the `design-reviewer` agent: separation of concerns, a
+   sanity check against the spec, reuse, dependencies and cycles, data and
+   concurrency, and security of the design. Fix, then the owner's yes.
+4. **Build** to the approved design, surgically (`.claude/rules/working.md`),
+   with tests that fail without the change.
+5. **Checks**: when building is done, the `checks` skill offers the menu
+   with the ones this diff needs marked; run only what the owner picks.
 
 ## Where it lives
 
@@ -73,10 +112,11 @@ Then:
 3. **Each repository's guidance:** before editing another repository, read its
    `CLAUDE.md` and the `.claude/rules/` files for the area. A session loads only
    its own repository's guidance by itself.
-4. **The end-to-end QA runs once, from the record:** the `qa-auditor` agent
-   audits the journeys across the whole stack, and the record's `qa.md` maps each
+4. **The end-to-end QA runs once, from the record, in the checks:** the
+   `qa-auditor` agent audits the journeys across the whole stack, and the record's `qa.md` maps each
    case to the parts' tests.
-5. **A security check per repository:** the `security-reviewer` agent reviews
+5. **A security check per repository, in the checks:** the
+   `security-reviewer` agent reviews
    each repository's diff against that repository's `.claude/rules/security.md`.
    Its findings go in that part's `qa.md`, or the record's for the owning
    repository.
@@ -88,32 +128,29 @@ Then:
 
 ## Starting
 
-1. Create the folder and copy the four templates from this skill's
-   `templates/` folder (`${CLAUDE_SKILL_DIR}/templates/`): `spec.md`,
-   `progress.md`, `HANDOVER.md` and `qa.md`. In the other repositories of a
+1. Create the folder and copy the templates the routing table names from
+   this skill's `templates/` folder (`${CLAUDE_SKILL_DIR}/templates/`):
+   `spec.md`, `progress.md`, `HANDOVER.md`, `qa.md`; `design.md` comes from
+   the `design` skill. In the other repositories of a
    change that spans several, add only the part folder, from
    `templates/part-README.md` and `templates/part-qa.md`.
 2. Fill `spec.md` before building: scope, sources, acceptance criteria and
    security notes. If the change starts from a BRD or designs, the `brd-design`
    skill fills it.
-3. Add other documents only when the work needs them (`design.md`, a runbook).
+3. Add other documents only when the work needs them (a runbook).
 
 ## Avoid rework
 
 Most repeated work comes from finding out late. Before building, and while
 building:
 
-1. **Settle the design with the owner first.** In `spec.md`, say:
-   - which module, page and statement owns each concern, one concern each
-     (pay of one kind isn't computed inside another kind's statement);
-   - who sees what;
-   - what shows when there's no data (a section without records isn't
-     shown).
-
-   Get the owner's yes before the first line of code.
-2. **The `security-reviewer` reads the design before the code**, then reviews
-   each part once it's built. Fix its findings, and have the same review
-   confirm the fixes.
+1. **Settle the design with the owner first** (features and refactors):
+   `design.md`, the `design-reviewer`'s approval, then the owner's yes, before
+   the first line of code. Say who sees what, and what shows when there's no
+   data (a section without records isn't shown).
+2. **Reuse before writing.** Search for the function, endpoint or component
+   that already does it. Extend it when every caller keeps its behaviour;
+   write a new one only when extending would break a caller or mix concerns.
 3. **Scan dependencies when a release line starts** and whenever one changes
    (`pip-audit`, `npm audit`), not only at release. An upgrade found at the end
    reopens every check.
@@ -137,27 +174,19 @@ building:
 
 ## Finishing
 
-A change is done when:
+A change is done when the checks the owner picked from the `checks` menu
+have run, and, for each that ran:
 
-1. its QA is recorded in `qa.md`: the cases, the automated tests, the
-   `qa-auditor` agent's run for anything a person or a job does, and the
-   `performance-auditor` agent's check for a change on a hot path (the `qa`
-   and `performance` skills);
-2. its security check is recorded in `qa.md`, as
-   `.claude/rules/security.md` requires: the `security-reviewer`'s findings
-   (the repository's checklist and the OWASP Top 10 and API Security Top 10
-   items that apply), each fixed or accepted by the owner;
-3. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
-4. `HANDOVER.md` is current;
-5. **names say what they hold:** every file, module, page, component and test
-   the change adds is named for its subject in the product's words (a test for
-   its feature, not its release). The `security-reviewer`'s "Names" section
-   lists any that don't; rename them, imports and references with them, before
-   handover;
-6. **cheap to read, and no slower:** the `security-reviewer`'s "Structure and
-   speed" section is answered. Each item is fixed, or the record says why not.
-   A fix for reading cost (a split file, a shared helper, a shorter guidance
-   file) never adds a query, a request or bundle weight. Speed comes first.
+1. **quality:** the `code-quality-reviewer`'s rows are applied, approved by
+   the owner (anything an outside caller may reach), or recorded as
+   follow-ups; names say what they hold; nothing got slower;
+2. **security:** the `security-reviewer`'s findings are in `qa.md`, as
+   `.claude/rules/security.md` requires, each fixed or accepted by the owner;
+3. **QA and performance:** the cases and automated tests, and the
+   `qa-auditor`'s and `performance-auditor`'s runs where they apply, are in
+   `qa.md` (the `qa` and `performance` skills);
+4. any lasting rule it settled is in `CLAUDE.md` or `.claude/rules/`;
+5. `HANDOVER.md` is current.
 
 Keep the record itself lean: cite requirement and decision ids (`AC-3`,
 `D-2`) instead of restating them, put the run counts in `qa.md` and not the

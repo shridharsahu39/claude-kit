@@ -5,8 +5,13 @@ SprintMoney's shared Claude Code set-up. It's two things:
 - **The `sm-kit` plugin** (`plugins/sm-kit/`), served from this repository as
   the `sprintmoney` plugin marketplace. It brings every team repository the same
   skills, agents and guard:
-  - skills: `change` (change records and their templates, and the list of
+  - skills: `change` (routes each task to its record, design step and model,
+    change records and their templates, and the list of
     [the team's repositories](plugins/sm-kit/skills/change/repositories.md)),
+    `design` (architecture before code, with database, backend and frontend
+    practices), `checks` (on request: code quality, then security, then QA and
+    performance), `cloudflare-security-audit` (manual only: Cloudflare's
+    full-repository audit, vendored and pinned),
     `qa` (how every change is tested), `performance` (performance and scale
     checks, with a load generator that runs only against this machine),
     `brd-design` (a BRD and its designs combined into a spec), `local-data`
@@ -14,9 +19,11 @@ SprintMoney's shared Claude Code set-up. It's two things:
     `~/.claude/CLAUDE.md`, tools, without sudo too, and QA site), `release`
     (readiness checks, the artifact, the one open PR) and `handover` (moving
     work, and the memory that doesn't travel, to another computer);
-  - agents: `security-reviewer` (an independent read-only review of a diff),
-    `qa-auditor` (an independent end-to-end QA audit of a change) and
-    `performance-auditor` (an independent performance and scale check);
+  - agents, each pinned to a model: `design-reviewer` (Opus: the design
+    before code), `code-quality-reviewer` (Sonnet: dead code, duplicates,
+    reuse, zombie routes, cycles), `security-reviewer` (Opus: a diff against
+    OWASP), `qa-auditor` and `performance-auditor` (Sonnet), and
+    `text-editor` (Haiku: text-only edits across many files);
   - a guard, a hook on every Bash command, that refuses `git clean -x`,
     `git stash --all`, force-adding `.claude/local/` and deleting it, and
     checks each commit Claude makes for local data, data
@@ -25,7 +32,9 @@ SprintMoney's shared Claude Code set-up. It's two things:
     exactly what it does).
 - **The files each repository keeps in step** (`repo-files/`), which
   [tools/sync.py](tools/sync.py) copies in: `.claude/settings.json` (turns the
-  plugin on), `.claude/.gitignore`, the short `local-data` rule, the Frappe
+  plugin on), `.claude/.gitignore`, the short `local-data` rule, the
+  `working` rule (how to think, route the task, spend few tokens, and never
+  remove what outside callers reach), the Frappe
   practice rule's body and the Frappe security rule's core, and the READMEs of
   `.claude/changes/` and `.claude/local/`.
 
@@ -135,15 +144,19 @@ a Frappe app. Then:
 
 1. Edit the plugin or `repo-files/`.
 2. Run the tests: `python3 -m unittest discover -s plugins/sm-kit/hooks` (the
-   guard) and `python3 -m unittest discover -s plugins/sm-kit/skills/performance`
-   (the load generator).
+   guard), `python3 -m unittest discover -s plugins/sm-kit/skills/performance`
+   (the load generator) and `python3 -m unittest discover -s plugins/sm-kit/skills/checks`
+   (the check recommender).
 3. Validate: `claude plugin validate .` and
    `claude plugin validate plugins/sm-kit`.
 4. Raise `version` in `plugins/sm-kit/.claude-plugin/plugin.json`, then open a
    PR here: teammates move to a new version only when this number changes.
    Once it merges, `claude plugin tag plugins/sm-kit --push` tags the release,
    and auto-update brings it to each teammate's next session.
-5. If `repo-files/` changed, run `tools/sync.py <repo> …` over the
+5. If `repo-files/` changed, set `KIT_TEAM_OWNERS` (the team's GitHub
+   organisations or accounts, comma-separated) and, for single repositories
+   elsewhere, `KIT_TEAM_REPOS` (`owner/name`, comma-separated), then run
+   `tools/sync.py <repo> …` over the
    repositories and commit the result in each, on a branch from its base. Run
    `tools/sync.py --check <repo> …` any time to see whether a repository has
    drifted from the kit. It works only on a team repository's own checkout.
@@ -154,6 +167,9 @@ from it, edits included. To go back to GitHub's copy, run
 `claude plugin marketplace remove sprintmoney`, then
 `claude plugin marketplace add shridharsahu39/claude-kit`.
 `claude --plugin-dir plugins/sm-kit` loads your clone for one session only.
+
+Material taken from other repositories, and the commit it's pinned to, is in
+[UPSTREAM.md](UPSTREAM.md).
 
 ## Adding a repository
 

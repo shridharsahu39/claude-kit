@@ -8,6 +8,7 @@ Usage:
 What it manages in each repository; everything else there is the repository's own:
 
 - .claude/.gitignore, .claude/settings.json, .claude/rules/local-data.md,
+  .claude/rules/working.md,
   .claude/changes/README.md and .claude/local/README.md, copied from
   repo-files/.claude/.
 - .claude/rules/frappe.md, where the repository has one: the body from
@@ -23,13 +24,14 @@ In a repository whose package.json uses Prettier, Markdown and JSON are
 formatted with that repository's own Prettier, as its CI checks them.
 
 It works only on a team repository's own checkout: the top of a git work tree
-with a remote in the team's GitHub organization, or one of the team's
-repositories outside it (TEAM_OUTSIDE). It never writes or deletes
+with a remote owned by one of KIT_TEAM_OWNERS (comma-separated GitHub
+organisations or accounts), or listed in KIT_TEAM_REPOS (owner/name, comma-separated). It never writes or deletes
 through a symlink. Exits 1 when --check finds a difference, 2 when it skipped
 a folder.
 """
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -37,7 +39,7 @@ from pathlib import Path
 
 KIT = Path(__file__).resolve().parent.parent
 FILES = KIT / "repo-files"
-COPIED = [".gitignore", "settings.json", "rules/local-data.md", "changes/README.md", "local/README.md"]
+COPIED = [".gitignore", "settings.json", "rules/local-data.md", "rules/working.md", "changes/README.md", "local/README.md"]
 RETIRED = {
     "skills/change/SKILL.md": {"ab1a116be2b6256af55bf6e4224ae7e4", "d71b75f75153ae2649f2af03efb06a8b"},
     "skills/change/templates/spec.md": {"3de5705f03d5c8620b1b4f051a55a483", "75d1507dc1126245647c4779f0fed908"},
@@ -53,12 +55,20 @@ RETIRED = {
 }
 FRONT = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
 APP_SECTION = re.compile(r"\n## In this app\n(.*?)\n## Before handover\n", re.DOTALL)
-# The organisation's repositories, and the team repositories kept outside it. A host alias such as
-# github.com-<account> (one SSH key per GitHub account) counts as github.com.
-TEAM_OWNERS = ["Wildflower-Business-Services-Pvt-Ltd", "shridharsahu39"]
-TEAM_OUTSIDE = ["fseduventures/classmanager-espo"]
-TEAM_REMOTE = re.compile(r"github\.com(?:-[\w.-]+)?[:/](?:%s)(?:\.git)?(?:\s|$)|github\.com(?:-[\w.-]+)?[:/](?:%s)/" % (
-    "|".join(re.escape(r) for r in TEAM_OUTSIDE), "|".join(re.escape(o) for o in TEAM_OWNERS)))
+# The team's GitHub owners (organisations or accounts) and single team repositories kept elsewhere,
+# from the environment, comma-separated: KIT_TEAM_OWNERS="my-org,my-account",
+# KIT_TEAM_REPOS="other-org/one-repo". A host alias such as github.com-<account> (one SSH key per
+# GitHub account) counts as github.com. With neither set, no repository qualifies.
+def _names(var):
+    return [n.strip() for n in os.environ.get(var, "").split(",") if n.strip()]
+
+
+TEAM_OWNERS = _names("KIT_TEAM_OWNERS")
+TEAM_OUTSIDE = _names("KIT_TEAM_REPOS")
+_HOST = r"github\.com(?:-[\w.-]+)?[:/]"
+_ALTS = ([_HOST + r"(?:%s)(?:\.git)?(?:\s|$)" % "|".join(map(re.escape, TEAM_OUTSIDE))] if TEAM_OUTSIDE else []) + \
+        ([_HOST + r"(?:%s)/" % "|".join(map(re.escape, TEAM_OWNERS))] if TEAM_OWNERS else [])
+TEAM_REMOTE = re.compile("|".join(_ALTS)) if _ALTS else None
 
 
 def not_a_team_repository(repo):
@@ -71,8 +81,10 @@ def not_a_team_repository(repo):
         return "not a git checkout"
     if Path(top).resolve() != repo.resolve():
         return f"not the top of its checkout ({top} is)"
+    if TEAM_REMOTE is None:
+        return "KIT_TEAM_OWNERS and KIT_TEAM_REPOS are unset, so no repository is a team repository"
     if not TEAM_REMOTE.search(remotes):
-        return "no remote in the team's GitHub organization or TEAM_OUTSIDE"
+        return "no remote owned by KIT_TEAM_OWNERS or listed in KIT_TEAM_REPOS"
     return None
 
 

@@ -1,6 +1,6 @@
 ---
 name: handover
-description: Hand work over to another computer or a fresh Claude Code session, or pick it up on the other side — what's unpushed, the standing notes that live only in this machine's memory, the tools the work needs, and the exact first steps. Use when the developer says they're moving to another machine, asks for a handover note, or opens a handover note from another computer.
+description: Move work to another computer or a fresh session, or pick it up — unpushed work, notes that live only in this machine's memory, tools needed, first steps. Use when the developer moves machines or opens a handover note.
 argument-hint: "[out | in <path to the note>]"
 ---
 

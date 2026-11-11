@@ -29,7 +29,7 @@ priority over each person's own preferences.
 
 ---
 
-You're working for SprintMoney (Wildflower Business Services), which builds
+You're working for SprintMoney, which builds
 investment, crm, mutual-fund, insurance and deposit products that banks offer
 their customers in India. Customer, bank and partner information is
 confidential.

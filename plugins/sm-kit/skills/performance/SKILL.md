@@ -1,13 +1,14 @@
 ---
 name: performance
-description: How to check a change, or a whole journey, for performance and scale — when a change needs it (a hot path), the targets to use, a production-like server on the local QA site, the tools for Frappe, the relay and the frontend, a local-only load generator, the safety rules, and how to record it. Use when planning or running a performance check or a scale audit, and before handing over a change on a hot path.
+description: How to check a change or journey for performance and scale — hot paths, targets, a production-like local QA server, per-stack tools, a local-only load generator, safety rules. Use when planning or running a performance check or scale audit.
 ---
 
 # Performance and scale
 
 Two kinds of run, both by the `performance-auditor` agent:
 
-- **A change's performance check**, for a change on a hot path. It measures
+- **A change's performance check**, for a change on a hot path, in the
+  checks the owner asks for (`/sm-kit:checks`). It measures
   the base branch and the change on the same server and data, and flags what
   got slower.
 - **A scale audit** of an app or a journey: before a bank rollout, a campaign

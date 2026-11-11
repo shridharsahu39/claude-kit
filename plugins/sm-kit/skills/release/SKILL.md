@@ -1,6 +1,6 @@
 ---
 name: release
-description: Ship a finished change as a release — the readiness checks (tests on every database engine, a fresh install, migrations), the version bump and deploy notes, committing by explicit paths after a secret scan, building and scanning the release artifact, pushing to the one open PR, and stating what wasn't verified. Use when a change is done and is to ship, when asked to build a release or a release ZIP, or before telling the owner a release is ready.
+description: Ship a finished change — readiness checks (every database engine, fresh install, migrations), version and deploy notes, commit after a secret scan, the release artifact, the one open PR, and what wasn't verified. Use when a change is to ship.
 argument-hint: "<version>"
 ---
 

@@ -45,8 +45,9 @@ Build against this list rather than reviewing at the end.
 
 ## Before handover
 
-1. Run the `security-reviewer` agent on the change's diff, in every repo the
-   change touches. It reviews on its own and doesn't edit.
+1. When the owner asks for the checks (`/sm-kit:checks`), the
+   `security-reviewer` agent reviews the change's diff in every repo the
+   change touches, after the code-quality pass. It doesn't edit.
 2. Fix each finding, or record why not. A high finding blocks handover until
    it's fixed or the change's owner accepts it in chat. High means: an
    authorization bypass, one customer reaching another's data, injection, or a
