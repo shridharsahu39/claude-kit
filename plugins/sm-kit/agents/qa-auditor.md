@@ -36,6 +36,11 @@ which tools to use. Do whatever the audit needs, within the limits below.
   (resident, NRI, joint, minor, …); each partner answer the change handles; the
   security rule's refusal cases (another account's id, a missing role, bad
   input); and back, cancel and reload mid-flow.
+- **IDOR cases:** for every changed route or screen that takes a record's id,
+  try, as a second persona from another customer or company, the first one's
+  ids: read, change, act, download, and name one inside a request body (a row,
+  a link, a filter). Expect a refusal that reads the same as a missing id, and
+  nothing of the record in the answer.
 - Add the cases the record's `qa.md` is missing before you run anything.
 
 ## Run it

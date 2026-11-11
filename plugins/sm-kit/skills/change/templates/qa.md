@@ -57,7 +57,7 @@ Only for a change on a hot path (sm-kit's `performance` skill); otherwise write
 ## Security check
 
 - **Reviewed:** each repository's diff and its base, and when the `security-reviewer` agent ran.
-- **Security cases:** the QA cases that test a refusal (another account's id, a missing role, bad input).
+- **Security cases:** the QA cases that test a refusal (another account's id, a missing role, bad input), including the IDOR sweep: each id-taking route tried with another customer's or company's ids, in the path and inside the body.
 
 | ID | Severity | Finding | Outcome |
 | --- | --- | --- | --- |
